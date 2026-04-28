@@ -7,10 +7,10 @@
 
     <title>SMHPIS Dashboard</title>
 
-    <!-- Fonts: Roboto -->
+    <!-- Fonts: Outfit & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,27 +21,8 @@
 
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        .icon-box {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            background: linear-gradient(310deg, #2563eb 0%, #9333ea 100%);
-            color: white;
-            font-size: 12px;
-        }
-        .sidebar-active {
-            background-color: white !important;
-            box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
-            font-weight: 600;
-        }
-    </style>
 </head>
-<body class="font-sans antialiased bg-bg-soft min-h-screen text-slate-700">
+<body class="font-sans antialiased bg-dashboard-bg min-h-screen text-slate-700">
     @auth
         @include('partials.sidebar')
     @endauth

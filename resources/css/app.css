@@ -6,52 +6,68 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif;
     
-    --color-primary: #2563eb;
-    --color-secondary: #9333ea;
-    --color-bg-soft: #f8f9fa;
+    --color-primary: #1d4ed8;
+    --color-secondary: #4f46e5;
+    --color-accent-teal: #0ea5e9;
+    --color-accent-purple: #8b5cf6;
+    --color-dashboard-bg: #f8fafc;
     
-    --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
-    --shadow-glass: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
     
-    --radius-soft: 1rem;
-    --radius-soft-lg: 1.5rem;
+    --radius-3xl: 2.5rem;
+    --radius-2xl: 1.5rem;
 }
 
 @layer components {
-    .card-soft {
-        @apply bg-white border border-slate-100 rounded-[--radius-soft-lg] shadow-[--shadow-soft] transition-all duration-300 hover:shadow-lg;
+    .card-premium {
+        @apply bg-white border border-slate-100 rounded-[--radius-3xl] shadow-[--shadow-soft] transition-all duration-300 hover:shadow-[--shadow-premium] hover:scale-[1.01];
     }
     
-    .glass-card {
-        @apply bg-white/80 backdrop-blur-md border border-white/30 rounded-[--radius-soft-lg] shadow-[--shadow-soft];
+    .sidebar-active {
+        @apply bg-blue-50 text-blue-700 font-bold;
     }
     
-    .btn-primary {
-        @apply px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 hover:-translate-y-0.5 transition-all active:scale-95;
+    .icon-box {
+        @apply h-11 w-11 flex items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition-all duration-300;
     }
     
-    .btn-outline {
-        @apply px-6 py-3 bg-white text-slate-700 font-bold uppercase tracking-widest text-xs rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-95 shadow-sm;
+    .sidebar-link:hover .icon-box {
+        @apply bg-blue-600 text-white shadow-lg shadow-blue-500/30;
     }
-    
-    .input-standard {
-        @apply w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-slate-400 text-sm;
+
+    .btn-premium {
+        @apply px-10 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest text-[10px];
     }
-    
-    .badge-blue { @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-blue-50 text-blue-600 border border-blue-100; }
-    .badge-purple { @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-purple-50 text-purple-600 border border-purple-100; }
-    .badge-green { @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-green-50 text-green-600 border border-green-100; }
+
+    .glass-effect {
+        @apply bg-white/80 backdrop-blur-md border border-white/20;
+    }
 }
 
 @layer base {
     body {
-        @apply bg-[--color-bg-soft] text-slate-600 font-sans antialiased;
+        @apply bg-[--color-dashboard-bg] text-slate-700 font-sans antialiased;
     }
     
     h1, h2, h3, h4, h5, h6 {
-        @apply tracking-tight text-slate-900;
+        @apply tracking-tight font-black text-slate-900;
     }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
 }

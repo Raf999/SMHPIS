@@ -1,83 +1,80 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="min-h-screen bg-bg-soft bg-pattern flex items-center justify-center relative overflow-hidden p-6">
-    <!-- Decorative background elements -->
-    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 2s;"></div>
-
-    <div class="relative z-10 w-full max-w-[1100px] glass-card !rounded-[3rem] flex overflow-hidden !p-0">
-        <!-- Left Side: Visual -->
-        <div class="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-primary to-secondary items-center justify-center p-12 text-white overflow-hidden">
-            <div class="absolute inset-0 bg-pattern opacity-10"></div>
-            <div class="relative z-10 text-center animate-fade-in-up">
-                <div class="mb-8 inline-flex items-center justify-center p-5 bg-white/20 backdrop-blur-md rounded-3xl border border-white/30">
-                    <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
+<div class="flex min-h-screen bg-white">
+    <!-- Left Side: Login Form -->
+    <div class="w-full lg:w-1/2 flex flex-col justify-center items-center px-8 md:px-24">
+        <div class="w-full max-w-md">
+            <!-- Logo & Brand -->
+            <div class="mb-12 flex flex-col items-center">
+                <div class="h-16 w-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 mb-6">
+                    <i class="fas fa-brain text-2xl"></i>
                 </div>
-                <h1 class="text-5xl font-black mb-6 tracking-tight uppercase">SMHPIS</h1>
-                <p class="text-xl font-medium opacity-90 max-w-md mx-auto leading-relaxed">Empowering student success through intelligent mental health support.</p>
-            </div>
-        </div>
-
-        <!-- Right Side: Form -->
-        <div class="flex-1 p-12 sm:p-20 flex flex-col justify-center bg-white/40">
-            <div class="mb-10">
-                <a href="/" class="inline-flex items-center text-xs font-black uppercase tracking-widest text-slate-400 hover:text-primary transition-colors mb-8 group">
-                    <i class="fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
-                    Back to Home
-                </a>
-                <h2 class="text-4xl font-black text-slate-900 mb-2 tracking-tight">Welcome Back</h2>
-                <p class="text-slate-500 font-medium">Please sign in to access your dashboard.</p>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tight">SMHPIS Portal</h1>
+                <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mt-2">Sign in to your account</p>
             </div>
 
-            @if($errors->any() || session('error'))
-                <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-5 rounded-2xl mb-8 animate-shake">
-                    <p class="text-sm font-bold">{{ $errors->first() ?? session('error') }}</p>
+            <!-- Validation Errors -->
+            @if ($errors->any())
+                <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded-r-xl">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
 
-            <form method="POST" action="/login" class="space-y-6">
+            <form method="POST" action="{{ route('login') }}" class="space-y-6">
                 @csrf
-
                 <div>
-                    <label for="email" class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Email Address</label>
-                    <input id="email" type="email" name="email" required autofocus
-                           class="input-standard h-14 !px-6"
-                           placeholder="john@university.edu">
+                    <label for="email" class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Email</label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+                           class="w-full h-14 px-6 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-blue-600 focus:bg-white outline-none transition-all font-bold text-slate-900">
                 </div>
 
                 <div>
-                    <label for="password" class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">Password</label>
+                    <label for="password" class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Password</label>
                     <input id="password" type="password" name="password" required
-                           class="input-standard h-14 !px-6"
-                           placeholder="••••••••">
+                           class="w-full h-14 px-6 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-blue-600 focus:bg-white outline-none transition-all font-bold text-slate-900">
                 </div>
 
-                <div class="flex items-center justify-between pb-4">
-                    <label class="flex items-center text-xs font-bold text-slate-400 cursor-pointer hover:text-slate-600 transition-colors">
-                        <input type="checkbox" name="remember" class="mr-3 h-5 w-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-0">
-                        Remember Session
+                <div class="flex items-center justify-between px-1">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="remember" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600">
+                        <span class="ml-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Remember me</span>
                     </label>
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline">Forgot password?</a>
+                    @endif
                 </div>
 
-                <button type="submit" class="btn-primary w-full h-16 !text-xs">
-                    Access Dashboard
+                <button type="submit" class="w-full h-16 bg-slate-900 text-white font-black rounded-2xl shadow-xl shadow-slate-900/20 hover:bg-blue-700 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest text-xs mt-8">
+                    Sign In
                 </button>
             </form>
+
+            <div class="mt-12 text-center">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    Don't have an account? 
+                    <a href="{{ route('register') }}" class="text-blue-600 font-black hover:underline">Create one</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side: Background Image & Quote -->
+    <div class="hidden lg:block w-1/2 relative overflow-hidden">
+        <img src="{{ asset('images/login_bg.png') }}" class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/20 to-transparent"></div>
+        
+        <div class="absolute bottom-20 left-20 right-20 text-white">
+            <h2 class="text-5xl font-black leading-tight tracking-tighter mb-6">
+                Understand your mind,<br>
+                unlock your potential.
+            </h2>
+            <p class="text-blue-200 font-bold uppercase tracking-[0.3em] text-xs">SMHPIS AI Intelligence Dashboard</p>
         </div>
     </div>
 </div>
-
-<style>
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
-    }
-    .animate-shake {
-        animation: shake 0.4s ease-in-out;
-    }
-</style>
 @endsection
