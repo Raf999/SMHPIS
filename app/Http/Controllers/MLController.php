@@ -67,7 +67,7 @@ class MLController extends Controller
         // 2. Call the AI API
         try {
             $apiUrl = rtrim(env('ML_API_URL', 'http://127.0.0.1:5000'), '/');
-            $response = Http::timeout(15)->post($apiUrl . '/predict', [
+            $response = Http::timeout(60)->post($apiUrl . '/predict', [
                 'age' => (int) $validated['age'],
                 'gender' => $student->gender ?? 'male', // Use profile gender
                 'gpa' => (float) $validated['gpa'],
