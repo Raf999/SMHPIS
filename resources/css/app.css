@@ -1,0 +1,57 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    --color-primary: #2563eb;
+    --color-secondary: #9333ea;
+    --color-bg-soft: #f8f9fa;
+    
+    --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+    --shadow-glass: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    
+    --radius-soft: 1rem;
+    --radius-soft-lg: 1.5rem;
+}
+
+@layer components {
+    .card-soft {
+        @apply bg-white border border-slate-100 rounded-[--radius-soft-lg] shadow-[--shadow-soft] transition-all duration-300 hover:shadow-lg;
+    }
+    
+    .glass-card {
+        @apply bg-white/80 backdrop-blur-md border border-white/30 rounded-[--radius-soft-lg] shadow-[--shadow-soft];
+    }
+    
+    .btn-primary {
+        @apply px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 hover:-translate-y-0.5 transition-all active:scale-95;
+    }
+    
+    .btn-outline {
+        @apply px-6 py-3 bg-white text-slate-700 font-bold uppercase tracking-widest text-xs rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-95 shadow-sm;
+    }
+    
+    .input-standard {
+        @apply w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-slate-400 text-sm;
+    }
+    
+    .badge-blue { @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-blue-50 text-blue-600 border border-blue-100; }
+    .badge-purple { @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-purple-50 text-purple-600 border border-purple-100; }
+    .badge-green { @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-green-50 text-green-600 border border-green-100; }
+}
+
+@layer base {
+    body {
+        @apply bg-[--color-bg-soft] text-slate-600 font-sans antialiased;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        @apply tracking-tight text-slate-900;
+    }
+}
