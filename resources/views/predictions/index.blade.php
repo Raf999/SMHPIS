@@ -2,73 +2,78 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto">
-    <div class="flex flex-col md:flex-row md:items-center justify-between mb-10">
+
+    <div class="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h1 class="text-4xl font-black text-slate-900 tracking-tight">Reports Log</h1>
-            <p class="text-slate-500 font-medium mt-1">Audit trail of mental health assessments</p>
+            <h1 class="page-title">Reports log</h1>
+            <p class="page-subtitle">Audit trail of mental health assessments</p>
         </div>
-        <div class="mt-4 md:mt-0 flex items-center space-x-3">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $predictions->count() }} record(s)</span>
-            <a href="{{ route('predictions.download') }}"
-               class="btn-primary flex items-center space-x-2 !py-3 !px-5">
-                <i class="fas fa-download"></i>
-                <span>Download CSV</span>
+        <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-400">{{ $predictions->count() }} record{{ $predictions->count() !== 1 ? 's' : '' }}</span>
+            <a href="{{ route('predictions.download') }}" class="btn-secondary gap-2">
+                <i class="fas fa-download text-xs"></i>
+                Download CSV
             </a>
         </div>
     </div>
 
-    <div class="bg-white rounded-[3rem] shadow-sm border border-gray-50 overflow-hidden">
+    <div class="card overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-left">
-                <thead class="bg-dashboard-bg/50 text-[10px] uppercase font-black text-gray-400 tracking-[0.2em]">
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <th class="px-8 py-6">Date</th>
-                        <th class="px-8 py-6">Subject</th>
-                        <th class="px-8 py-6 text-center">Mood</th>
-                        <th class="px-8 py-6 text-center">Stress</th>
-                        <th class="px-8 py-6">Inference</th>
-                        <th class="px-8 py-6 text-right">Actions</th>
+                        <th>Date</th>
+                        <th>Student</th>
+                        <th class="text-center">Mood</th>
+                        <th class="text-center">Stress</th>
+                        <th>Result</th>
+                        <th class="text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-50">
+                <tbody>
                     @forelse($predictions as $p)
-                    <tr class="hover:bg-dashboard-bg/30 transition-colors group">
-                        <td class="px-8 py-6">
-                            <p class="font-black text-gray-900 text-xs tracking-tight">{{ $p->created_at->format('M d, Y') }}</p>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">{{ $p->created_at->format('h:i A') }}</p>
+                    <tr>
+                        <td>
+                            <p class="text-sm font-medium text-slate-800">{{ $p->created_at->format('M d, Y') }}</p>
+                            <p class="text-xs text-slate-400">{{ $p->created_at->format('h:i A') }}</p>
                         </td>
-                        <td class="px-8 py-6">
-                            <p class="font-black text-gray-900 text-sm tracking-tight">{{ $p->student->user->name }}</p>
-                            <div class="flex items-center mt-1">
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $p->student->student_id_number }}</p>
-                                <span class="mx-2 text-gray-200">•</span>
-                                <p class="text-[10px] font-bold text-teal-600 uppercase tracking-widest">
-                                    By: {{ $p->creator ? ($p->creator->id === $p->student->user_id ? 'Self' : $p->creator->name) : 'System' }}
-                                </p>
+                        <td>
+                            <p class="text-sm font-medium text-slate-800">{{ $p->student->user->name }}</p>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-xs text-slate-400">{{ $p->student->student_id_number }}</span>
+                                <span class="text-slate-200">·</span>
+                                <span class="text-xs text-blue-600">
+                                    {{ $p->creator ? ($p->creator->id === $p->student->user_id ? 'Self' : $p->creator->name) : 'System' }}
+                                </span>
                             </div>
                         </td>
-                        <td class="px-8 py-6 text-center">
-                            <span class="inline-block px-3 py-1 bg-white rounded-xl shadow-sm border border-gray-100 text-[10px] font-black text-gray-600">
+                        <td class="text-center">
+                            <span class="inline-block px-2 py-0.5 bg-slate-50 border border-slate-100 rounded-md text-xs text-slate-600">
                                 {{ $p->input->mood }}/5
                             </span>
                         </td>
-                        <td class="px-8 py-6 text-center">
-                            <p class="text-sm font-black text-gray-900">{{ $p->input->stress }}/10</p>
+                        <td class="text-center">
+                            <span class="text-sm font-medium text-slate-800">{{ $p->input->stress }}/10</span>
                         </td>
-                        <td class="px-8 py-6">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $p->prediction_result == 'Struggling' ? 'bg-red-50 text-red-600' : ($p->prediction_result == 'At Risk' ? 'bg-orange-50 text-orange-600' : 'bg-green-50 text-green-600') }}">
-                                {{ $p->prediction_result }} [{{ $p->prediction_class }}]
-                            </span>
+                        <td>
+                            @if($p->prediction_result === 'Healthy')
+                                <span class="badge-healthy">{{ $p->prediction_result }}</span>
+                            @elseif($p->prediction_result === 'Struggling')
+                                <span class="badge-struggling">{{ $p->prediction_result }}</span>
+                            @else
+                                <span class="badge-atrisk">{{ $p->prediction_result }}</span>
+                            @endif
+                            <span class="text-[11px] text-slate-400 ml-1">[{{ $p->prediction_class }}]</span>
                         </td>
-                        <td class="px-8 py-6 text-right">
-                            <a href="{{ route('student.result', $p->id) }}" class="h-10 px-4 bg-white rounded-xl shadow-sm border border-gray-100 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-teal-500 hover:border-teal-200 transition-all inline-flex items-center">
+                        <td class="text-right">
+                            <a href="{{ route('student.result', $p->id) }}" class="btn-ghost text-xs px-2.5 py-1.5">
                                 View
                             </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center text-gray-400 italic">
+                        <td colspan="6" class="py-12 text-center text-sm text-slate-400 italic">
                             No prediction logs found.
                         </td>
                     </tr>
@@ -77,5 +82,6 @@
             </table>
         </div>
     </div>
+
 </div>
 @endsection
