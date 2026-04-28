@@ -21,8 +21,8 @@
         <div class="bg-white rounded-[3rem] p-10 shadow-sm border border-gray-50 flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-10">
             <div class="relative group">
                 <div class="h-32 w-32 bg-gradient-to-br from-teal-400 to-blue-400 rounded-[2.5rem] flex items-center justify-center text-white text-3xl font-black shadow-2xl overflow-hidden transition-transform group-hover:scale-105">
-                    @if($user->profile_image)
-                        <img id="image_preview" src="{{ Storage::disk('public')->url($user->profile_image) }}" class="h-full w-full object-cover">
+                    @if($user->profile_image_url)
+                        <img id="image_preview" src="{{ $user->profile_image_url }}" class="h-full w-full object-cover">
                     @else
                         <div id="initial_display" class="flex items-center justify-center h-full w-full">{{ substr($user->name, 0, 1) }}</div>
                         <img id="image_preview" class="h-full w-full object-cover hidden">

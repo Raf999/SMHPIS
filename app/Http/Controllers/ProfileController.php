@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Upload\UploadApi;
 
 class ProfileController extends Controller
 {
@@ -32,28 +34,34 @@ class ProfileController extends Controller
             $user->password = $request->password; // Model cast handles hashing
         }
 
-        if ($request->filled('cropped_image')) {
-            // Handle base64 cropped image
-            $imageData = $request->cropped_image;
-            $fileName = 'profile_images/' . uniqid() . '.jpg';
-            
-            // Delete old image
-            if ($user->profile_image) {
-                Storage::disk('public')->delete($user->profile_image);
-            }
+        if ($request->filled('cropped_image') || $request->hasFile('profile_image')) {
+            // Configure Cloudinary
+            Configuration::instance(env('CLOUDINARY_URL'));
+            $uploadApi = new UploadApi();
 
-            // Decode and save
-            $data = substr($imageData, strpos($imageData, ',') + 1);
-            $data = base64_decode($data);
-            Storage::disk('public')->put($fileName, $data);
-            
-            $user->profile_image = $fileName;
-        } elseif ($request->hasFile('profile_image')) {
-            // Fallback for standard upload
-            if ($user->profile_image) {
-                Storage::disk('public')->delete($user->profile_image);
+            if ($request->filled('cropped_image')) {
+                // Handle base64 cropped image
+                $uploadResult = $uploadApi->upload($request->cropped_image, [
+                    'folder' => 'profile_images',
+                    'transformation' => [
+                        'width' => 400,
+                        'height' => 400,
+                        'crop' => 'fill'
+                    ]
+                ]);
+                $user->profile_image = $uploadResult['secure_url'];
+            } elseif ($request->hasFile('profile_image')) {
+                // Fallback for standard upload
+                $uploadResult = $uploadApi->upload($request->file('profile_image')->getRealPath(), [
+                    'folder' => 'profile_images',
+                    'transformation' => [
+                        'width' => 400,
+                        'height' => 400,
+                        'crop' => 'fill'
+                    ]
+                ]);
+                $user->profile_image = $uploadResult['secure_url'];
             }
-            $user->profile_image = $request->file('profile_image')->store('profile_images', 'public');
         }
 
         $user->save();

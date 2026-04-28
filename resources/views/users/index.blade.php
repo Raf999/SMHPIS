@@ -34,8 +34,8 @@
                         <td class="px-8 py-6">
                             <div class="flex items-center">
                                 <div class="h-12 w-12 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center text-gray-900 font-black uppercase transition-transform group-hover:scale-110 overflow-hidden">
-                                    @if($user->profile_image)
-                                        <img src="{{ Storage::disk('public')->url($user->profile_image) }}" class="h-full w-full object-cover">
+                                    @if($user->profile_image_url)
+                                        <img src="{{ $user->profile_image_url }}" class="h-full w-full object-cover">
                                     @else
                                         {{ substr($user->name, 0, 1) }}
                                     @endif

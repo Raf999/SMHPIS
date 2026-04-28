@@ -9,8 +9,8 @@
         <a href="{{ route('profile.edit') }}" class="block px-6 py-8 text-center group border-b border-slate-50">
             <div class="relative inline-block mb-4">
                 <div class="h-16 w-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-lg overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                    @if(Auth::user()->profile_image)
-                        <img src="{{ Storage::disk('public')->url(Auth::user()->profile_image) }}" class="h-full w-full object-cover">
+                    @if(Auth::user()->profile_image_url)
+                        <img id="image_preview" src="{{ Auth::user()->profile_image_url }}" class="h-full w-full object-cover">
                     @else
                         {{ substr(Auth::user()->name, 0, 1) }}
                     @endif

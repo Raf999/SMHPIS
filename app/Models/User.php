@@ -76,4 +76,20 @@ class User extends Authenticatable
     {
         return $this->role === 'student';
     }
+
+    /**
+     * Accessor for profile image URL
+     */
+    public function getProfileImageUrlAttribute()
+    {
+        if (!$this->profile_image) {
+            return null;
+        }
+
+        if (str_starts_with($this->profile_image, 'http')) {
+            return $this->profile_image;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->profile_image);
+    }
 }
