@@ -142,6 +142,95 @@
         </div>
 
     </div>
+
+    {{-- Recent Activity --}}
+    <div class="card mt-6">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-clock-rotate-left text-blue-600 text-xs"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-semibold text-slate-900">Recent Activity</h2>
+                    <p class="text-[11px] text-slate-400">Latest predictions across all students</p>
+                </div>
+            </div>
+            <span class="text-[11px] font-medium text-slate-400 bg-slate-50 px-2.5 py-1 rounded-md">
+                {{ $recentPredictions->count() }} latest
+            </span>
+        </div>
+
+        @if($recentPredictions->isEmpty())
+            <div class="px-6 py-12 text-center">
+                <div class="h-12 w-12 bg-slate-50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-inbox text-slate-300 text-lg"></i>
+                </div>
+                <p class="text-sm font-medium text-slate-400">No predictions yet</p>
+                <p class="text-xs text-slate-300 mt-1">Activity will appear here once students begin assessments</p>
+            </div>
+        @else
+            <div class="divide-y divide-slate-50">
+                @foreach($recentPredictions as $prediction)
+                    <div class="flex items-center gap-4 px-6 py-3.5 hover:bg-slate-50/60 transition-colors group">
+                        {{-- Timeline indicator --}}
+                        <div class="shrink-0">
+                            @if($prediction->prediction_result === 'Healthy')
+                                <div class="h-8 w-8 bg-green-50 rounded-lg flex items-center justify-center ring-2 ring-green-100/60">
+                                    <i class="fas fa-heart-pulse text-green-600 text-[11px]"></i>
+                                </div>
+                            @elseif($prediction->prediction_result === 'At Risk')
+                                <div class="h-8 w-8 bg-amber-50 rounded-lg flex items-center justify-center ring-2 ring-amber-100/60">
+                                    <i class="fas fa-triangle-exclamation text-amber-600 text-[11px]"></i>
+                                </div>
+                            @else
+                                <div class="h-8 w-8 bg-red-50 rounded-lg flex items-center justify-center ring-2 ring-red-100/60">
+                                    <i class="fas fa-circle-exclamation text-red-600 text-[11px]"></i>
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Content --}}
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-medium text-slate-800 truncate">
+                                Prediction generated for
+                                <span class="font-semibold text-slate-900">
+                                    {{ $prediction->student?->user?->name ?? 'Student #' . $prediction->student_id }}
+                                </span>
+                            </p>
+                            <div class="flex items-center gap-2 mt-1">
+                                @if($prediction->input)
+                                    <span class="text-[10px] text-slate-400">
+                                        Stress: {{ $prediction->input->stress }}/10
+                                    </span>
+                                    <span class="text-slate-200">·</span>
+                                    <span class="text-[10px] text-slate-400">
+                                        Anxiety: {{ $prediction->input->anxiety }}/10
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- Badge --}}
+                        <div class="shrink-0 hidden sm:block">
+                            @if($prediction->prediction_result === 'Healthy')
+                                <span class="badge-healthy"><i class="fas fa-circle text-[5px]"></i> Healthy</span>
+                            @elseif($prediction->prediction_result === 'At Risk')
+                                <span class="badge-atrisk"><i class="fas fa-circle text-[5px]"></i> At Risk</span>
+                            @else
+                                <span class="badge-struggling"><i class="fas fa-circle text-[5px]"></i> Struggling</span>
+                            @endif
+                        </div>
+
+                        {{-- Timestamp --}}
+                        <div class="shrink-0 text-right">
+                            <p class="text-[11px] text-slate-400 font-medium">{{ $prediction->created_at->diffForHumans(null, false, true) }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

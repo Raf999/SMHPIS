@@ -73,6 +73,14 @@ class DashboardController extends Controller
         $teacherCount = User::where('role', 'teacher')->count();
         $totalPredictions = MentalHealthInput::count();
 
-        return view('admin.dashboard', compact('totalUsers', 'studentCount', 'teacherCount', 'totalPredictions'));
+        // Recent activity feed — last 10 predictions with relationships
+        $recentPredictions = Prediction::with(['student.user', 'input'])
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'totalUsers', 'studentCount', 'teacherCount', 'totalPredictions', 'recentPredictions'
+        ));
     }
 }
