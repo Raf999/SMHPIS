@@ -34,7 +34,8 @@ class DashboardController extends Controller
         }
 
         // Fetch KPIs for Student
-        $recentPredictions = MentalHealthInput::where('student_id', $student->id)
+        $recentPredictions = Prediction::with('input')
+            ->where('student_id', $student->id)
             ->latest()
             ->take(5)
             ->get();
