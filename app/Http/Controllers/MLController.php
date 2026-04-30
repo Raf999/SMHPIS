@@ -67,7 +67,8 @@ class MLController extends Controller
         // 2. Call the AI API
         try {
             $apiUrl = rtrim(env('ML_API_URL', 'http://127.0.0.1:5000'), '/');
-            $response = Http::timeout(60)->post($apiUrl . '/predict', [
+            // Original call: $response = Http::timeout(60)->post($apiUrl . '/predict', [
+            $response = Http::withoutVerifying()->timeout(60)->post($apiUrl . '/predict', [
                 'age' => (int) $validated['age'],
                 'gender' => $student->gender ?? 'male', // Use profile gender
                 'gpa' => (float) $validated['gpa'],
@@ -97,7 +98,9 @@ class MLController extends Controller
                 return back()->withErrors(['api' => 'The AI server returned an error. Please try again later.']);
             }
         } catch (\Exception $e) {
-            return back()->withErrors(['api' => 'Could not connect to the AI server. Make sure the Flask API is running.']);
+            \Log::error('AI API Connection Error: ' . $e->getMessage());
+            // Original: return back()->withErrors(['api' => 'Could not connect to the AI server. Make sure the Flask API is running.']);
+            return back()->withErrors(['api' => 'Could not connect to the AI server. Please make sure the API service is active.']);
         }
     }
 
